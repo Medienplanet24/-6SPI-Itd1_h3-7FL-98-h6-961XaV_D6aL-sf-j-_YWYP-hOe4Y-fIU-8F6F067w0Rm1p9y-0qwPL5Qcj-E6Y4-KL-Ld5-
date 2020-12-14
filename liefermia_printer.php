@@ -101,7 +101,7 @@ die;
 
 require 'plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://updateshop.liefermia.de/wp-plugins/plugin-printer.json',
+	'https://raw.githubusercontent.com/Medienplanet24/Printer-Plugin/Updater/plugin-printer.json?token=AGFEREAMYWNW5QJSSNI44A274DZFA',
 	__FILE__, //Full path to the main plugin file or functions.php.
 	'unique-plugin-or-theme-slug2'
 );
