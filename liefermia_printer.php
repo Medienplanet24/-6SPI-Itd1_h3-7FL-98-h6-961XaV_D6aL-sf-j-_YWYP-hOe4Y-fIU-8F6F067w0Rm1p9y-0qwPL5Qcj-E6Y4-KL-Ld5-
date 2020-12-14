@@ -1,21 +1,21 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.1.3
+ * @version 1.2.1
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://wordpress.org/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.1.3
+Version: 1.2.1
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
 
 function liefermia_printer_url_handler() {
-     if( isset( $_GET['liefermia_printer_exe'] ) ) {
-     	include('../../../wp-config.php');
+     if( isset( $_GET['liefermia_printer_exe'] ) ) { 
+     
      	$newfile="last.txt";
 if (file_exists($newfile)) {
    // $myfile = fopen($newfile, 'a');
@@ -43,20 +43,17 @@ function mb_unserialize($string) {
         $string);
     return unserialize($string2);
 }    
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-//die;
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
 
-$sql = "SELECT * FROM `wp_wppizza_orders` where id >$m order by id asc limit 0,1";  
+  global $wpdb;
+
+$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`transaction_details` LIKE 'SUCCESS' or initiator like 'COD') order by id asc limit 0,1";  
 //$sql = "SELECT * FROM `wp_wppizza_orders` where id >4 order by id asc limit 0,1";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
+//$result = $wpdb->query("SET NAMES 'UTF8'");
+$result = $wpdb->get_results($sql,ARRAY_A );
+//var_dump($wpdb->num_rows); die;
+if ($wpdb->num_rows > 0) {
   // output data of each row
-  while($row = $result->fetch_assoc()) {
+  foreach($result as $row ) {
   	echo($row['order_date'].PHP_EOL); 
   	$customer=mb_unserialize($row['customer_ini']);
 
@@ -93,12 +90,13 @@ echo 'Bezahlt durch:'.'Barzahlung bei Lieferung';
   	$myfiles = fopen("last.txt", "w") or die("Unable to open filse!"); 
 fwrite($myfiles, $row["id"]); 
 fclose($myfiles);
+die;
 //    echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
   }
 } else {
   echo "";
 }
-$conn->close();
+
 die;
           // process data here
      }
@@ -110,3 +108,4 @@ $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	__FILE__, //Full path to the main plugin file or functions.php.
 	'unique-plugin-or-theme-slug2'
 );
+
