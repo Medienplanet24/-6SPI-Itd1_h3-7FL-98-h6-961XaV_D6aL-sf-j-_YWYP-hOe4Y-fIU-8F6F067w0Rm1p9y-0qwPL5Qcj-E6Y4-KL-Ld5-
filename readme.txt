@@ -14,6 +14,9 @@ API zum ansteuern der Drucker.
 
 == Changelog ==
 
+= 1.2.4 =
+* Update: Update Test
+
 = 1.2.3 =
 * Update: Auto Update for 5.6
 
