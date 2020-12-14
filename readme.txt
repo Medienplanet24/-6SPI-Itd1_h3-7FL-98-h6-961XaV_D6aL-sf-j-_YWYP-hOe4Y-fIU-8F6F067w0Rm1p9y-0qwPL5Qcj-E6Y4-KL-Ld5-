@@ -4,7 +4,7 @@ Tags: liefermia,printer
 Requires at least: 5.6
 Tested up to: 5.6
 Stable tag: 5.6
-Requires PHP: 7.0
+Requires PHP: 7.4
 
 Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
 
