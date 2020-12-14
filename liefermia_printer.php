@@ -1,14 +1,14 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.1
+ * @version 1.2.3
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://wordpress.org/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.1
+Version: 1.2.3
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
@@ -16,17 +16,14 @@ add_action( 'init', 'liefermia_printer_url_handler' );
 function liefermia_printer_url_handler() {
      if( isset( $_GET['liefermia_printer_exe'] ) ) { 
      
-     	$newfile="last.txt";
-if (file_exists($newfile)) {
-   // $myfile = fopen($newfile, 'a');
-//    fwrite($fh, 'd');
-} else {
-    echo "sfaf";
+     	$newfile= plugin_dir_path( __FILE__ ) ."/last.txt";
+if (!file_exists($newfile)) {
+   // echo "sfaf";
     $myfile = fopen($newfile, 'wb');
-    fwrite($fh, '1');
+    fwrite($myfile, '1');
     fclose($myfile);
 }
-$myfile = fopen("last.txt", "r") or die("Unable to open files!");
+$myfile = fopen($newfile, "r") or die("Unable to open files!");
 $m= fgets($myfile);
 //var_dump($m);
 fclose($myfile);
@@ -87,7 +84,7 @@ echo 'Gesamt:'.PHP_EOL.$row['order_total'].'€'.PHP_EOL;
 
 echo '════════════════════'.PHP_EOL; 
 echo 'Bezahlt durch:'.'Barzahlung bei Lieferung'; 
-  	$myfiles = fopen("last.txt", "w") or die("Unable to open filse!"); 
+  	$myfiles = fopen($newfile, "w") or die("Unable to open filse!"); 
 fwrite($myfiles, $row["id"]); 
 fclose($myfiles);
 die;
@@ -108,4 +105,5 @@ $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	__FILE__, //Full path to the main plugin file or functions.php.
 	'unique-plugin-or-theme-slug2'
 );
+
 
