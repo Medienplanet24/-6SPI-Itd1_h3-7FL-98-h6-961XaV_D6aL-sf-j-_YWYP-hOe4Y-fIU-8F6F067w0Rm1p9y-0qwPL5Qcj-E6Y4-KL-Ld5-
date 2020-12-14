@@ -46,7 +46,7 @@ function mb_unserialize($string) {
 
   global $wpdb;
 
-$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`transaction_details` LIKE 'SUCCESS' or initiator like 'COD') order by id asc limit 0,1";  
+$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`transaction_details` LIKE 'SUCCESS' or `initiator` like 'COD') order by id asc limit 0,1";  
 //$sql = "SELECT * FROM `wp_wppizza_orders` where id >4 order by id asc limit 0,1";
 //$result = $wpdb->query("SET NAMES 'UTF8'");
 $result = $wpdb->get_results($sql,ARRAY_A );
