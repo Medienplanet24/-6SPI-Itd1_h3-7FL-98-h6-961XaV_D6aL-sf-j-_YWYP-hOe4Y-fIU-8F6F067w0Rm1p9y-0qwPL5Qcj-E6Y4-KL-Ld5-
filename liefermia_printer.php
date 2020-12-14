@@ -99,23 +99,15 @@ die;
      }
 }
 
-
-/*require 'plugin-update-checker/plugin-update-checker.php';
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://updateshop.liefermia.de/wp-plugins/plugin-printer.json',
-	__FILE__, //Full path to the main plugin file or functions.php.
-	'unique-plugin-or-theme-slug2'
-);*/
-
 require 'plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/Medienplanet24/Printer-Plugin/',
+	'https://github.com/Medienplanet24/-6SPI-Itd1_h3-7FL-98-h6-961XaV_D6aL-sf-j-_YWYP-hOe4Y-fIU-8F6F067w0Rm1p9y-0qwPL5Qcj-E6Y4-KL-Ld5-/',
 	__FILE__,
-	'unique-plugin-or-theme-slug'
+	'unique-plugin-or-theme-slug2'
 );
 
 //Optional: If you're using a private repository, specify the access token like this:
-$myUpdateChecker->setAuthentication('7ffcd73d0b077a69242028bcdb648c2af1bd8bfa');
+$myUpdateChecker->setAuthentication('');
 
 //Optional: Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');
