@@ -1,22 +1,22 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.4
+ * @version 1.2.2
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://wordpress.org/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.4
+Version: 1.2.2
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
 
 function liefermia_printer_url_handler() {
      if( isset( $_GET['liefermia_printer_exe'] ) ) { 
-     
-     	$newfile= plugin_dir_path( __FILE__ ) ."/last.txt";
+     $upload_dir   = wp_upload_dir();
+     	$newfile= $upload_dir['basedir']."/last.txt";
 if (!file_exists($newfile)) {
    // echo "sfaf";
     $myfile = fopen($newfile, 'wb');
@@ -99,17 +99,3 @@ die;
      }
 }
 
-require 'plugin-update-checker/plugin-update-checker.php';
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/Medienplanet24/-6SPI-Itd1_h3-7FL-98-h6-961XaV_D6aL-sf-j-_YWYP-hOe4Y-fIU-8F6F067w0Rm1p9y-0qwPL5Qcj-E6Y4-KL-Ld5-/',
-	__FILE__,
-	'unique-plugin-or-theme-slug2'
-);
-
-//Optional: If you're using a private repository, specify the access token like this:
-$myUpdateChecker->setAuthentication('');
-
-//Optional: Set the branch that contains the stable release.
-$myUpdateChecker->setBranch('main');
-
-$myUpdateChecker->getVcsApi()->enableReleaseAssets();
