@@ -1,14 +1,14 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.2
+ * @version 1.2.5
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://wordpress.org/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.2
+Version: 1.2.5
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
@@ -99,3 +99,17 @@ die;
      }
 }
 
+require 'plugin-update-checker/plugin-update-checker.php';
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/Medienplanet24/-6SPI-Itd1_h3-7FL-98-h6-961XaV_D6aL-sf-j-_YWYP-hOe4Y-fIU-8F6F067w0Rm1p9y-0qwPL5Qcj-E6Y4-KL-Ld5-/',
+	__FILE__,
+	'unique-plugin-or-theme-slug2'
+);
+
+//Optional: If you're using a private repository, specify the access token like this:
+$myUpdateChecker->setAuthentication('');
+
+//Optional: Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
