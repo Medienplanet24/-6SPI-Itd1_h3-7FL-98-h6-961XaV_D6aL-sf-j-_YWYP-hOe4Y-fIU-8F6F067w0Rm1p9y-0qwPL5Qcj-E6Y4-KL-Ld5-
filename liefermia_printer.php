@@ -67,7 +67,7 @@ echo str_replace('  ','',$row['customer_details']);
 echo PHP_EOL.'════════════════════'.PHP_EOL; 
 foreach($order['items'] as $order_item){
 	echo $order_item['quantity'].'Ꭓ'.$order_item['title'].' '.$order_item["price_label"].PHP_EOL; 
-	foreach($order_item['extend_data'] ['addingredients']['multi'] as $add_items){
+	foreach($order_item['extend_data']['addingredients']['multi'] as $add_items){
 		
 		foreach($add_items as $atems){
 		foreach($atems as $items){
