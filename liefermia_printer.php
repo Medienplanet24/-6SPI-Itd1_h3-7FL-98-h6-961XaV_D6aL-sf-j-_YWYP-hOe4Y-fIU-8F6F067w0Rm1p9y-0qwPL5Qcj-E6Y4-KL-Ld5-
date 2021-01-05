@@ -1,24 +1,24 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.6
+ * @version 1.2.7
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://net1.ir/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.6
+Version: 1.2.7
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
 
-function liefermia_printer_url_handler() 
+function liefermia_printer_url_handler()
 {
     if( isset( $_GET['liefermia_printer_exe'] ) )
     { 
     	$upload_dir   = wp_upload_dir();
-    	$newfile= $upload_dir['basedir']."/last.txt";
+    	    	$newfile= $upload_dir['basedir']."/last_access_device_".$_GET['device_id'].".txt";
 		global $wpdb;
 
 		if (!file_exists($newfile))
@@ -67,18 +67,19 @@ function liefermia_printer_url_handler()
 			  {
 			  	$customer=mb_unserialize($row['customer_ini']);
 			  	$order=mb_unserialize($row['order_ini']);
-				echo '          BESTELLNUMMER'.PHP_EOL; 
+			  	 	echo get_bloginfo( 'name' ).PHP_EOL;
+				echo '            BESTELLNUMMER'.PHP_EOL; 
 				if($row['initiator']=='PAYPAL')
 				{
-					echo '         ╔════════════╗'.PHP_EOL;  
-					echo '         '.$row['transaction_id'].PHP_EOL;
-					echo '         ╚════════════╝'.PHP_EOL;
+					echo '           ╔════════════╗'.PHP_EOL;  
+					echo '           '.$row['transaction_id'].PHP_EOL;
+					echo '           ╚════════════╝'.PHP_EOL;
 				}
 				else
 				{
-					echo '          ╔══════════╗'.PHP_EOL;  
-					echo '          '.$row['transaction_id'].PHP_EOL;
-					echo '          ╚══════════╝'.PHP_EOL;	
+					echo '            ╔══════════╗'.PHP_EOL;  
+					echo '            '.$row['transaction_id'].PHP_EOL;
+					echo '            ╚══════════╝'.PHP_EOL;	
 				}
 				echo PHP_EOL;
 				echo 'KUNDENDATEN'.PHP_EOL; 
@@ -132,7 +133,7 @@ function liefermia_printer_url_handler()
 				}
 				echo PHP_EOL;
 				echo PHP_EOL;
-				echo '- DIES IST KEINE RECHNUNG - ';
+				echo '   - DIES IST KEINE RECHNUNG - ';
 				echo PHP_EOL;
 				echo PHP_EOL;
 				//$timestamp = $row['order_date'];
