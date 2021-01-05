@@ -14,8 +14,11 @@ API zum ansteuern der Drucker.
 
 == Changelog ==
 
+= 1.2.7 =
+* Update: Add multi printer Support
+
 = 1.2.6 =
-* Update: Payment method updated & Design
+* Update: Payment method updated
 
 = 1.2.5 =
 * Update: Speicher Pfad
