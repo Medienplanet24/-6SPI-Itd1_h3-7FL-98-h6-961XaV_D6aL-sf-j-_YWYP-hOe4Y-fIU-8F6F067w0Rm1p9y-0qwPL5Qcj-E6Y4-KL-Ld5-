@@ -1,14 +1,14 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.7
+ * @version 1.2.8
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://net1.ir/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.7
+Version: 1.2.8
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
@@ -25,125 +25,131 @@ function liefermia_printer_url_handler()
 		{
 			$sqlid = "SELECT order_id FROM  `".$wpdb->prefix ."wppizza_orders_meta` ORDER BY `order_id` DESC LIMIT 1";
 			$resultid = $wpdb->get_results($sqlid,ARRAY_A );
-			foreach($resultid as $rowid )
-			{
-			   	$myfile = fopen($newfile, 'wb');
-				fwrite($myfile, ''.$rowid['order_id'].'');
-				fclose($myfile);
-			}
-		}
-		$myfile = fopen($newfile, "r") or die("Unable to open files!");
-		$m=fgets($myfile);
-		fclose($myfile);
-		
-		// Create connection
-		function mb_unserialize($string)
-		{
-			$string2 = preg_replace_callback
-			(
-				'!s:(\d+):"(.*?)";!s',
-				function($m)
-				{
-				    $len = strlen($m[2]);
-				    $result = "s:$len:\"{$m[2]}\";";
-				    return $result;
-				},
-				$string
-			);
-			return unserialize($string2);
-		}    
-		
-		global $wpdb;
-		
-		$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`payment_status` LIKE 'COMPLETED') order by id asc limit 0,1";  
-			//$sql = "SELECT * FROM `wp_wppizza_orders` where id =8 order by id asc limit 0,1";
-			//$result = $wpdb->query("SET NAMES 'UTF8'");
-			$result = $wpdb->get_results($sql,ARRAY_A );
-			//var_dump($wpdb->num_rows); die;
 			if ($wpdb->num_rows > 0) 
 			{
-			  // output data of each row
-			  foreach($result as $row ) 
-			  {
-			  	$customer=mb_unserialize($row['customer_ini']);
-			  	$order=mb_unserialize($row['order_ini']);
-			  	 	echo get_bloginfo( 'name' ).PHP_EOL;
-				echo '            BESTELLNUMMER'.PHP_EOL; 
-				if($row['initiator']=='PAYPAL')
+				foreach($resultid as $rowid )
 				{
-					echo '           ╔════════════╗'.PHP_EOL;  
-					echo '           '.$row['transaction_id'].PHP_EOL;
-					echo '           ╚════════════╝'.PHP_EOL;
+					$myfile = fopen($newfile, 'wb');
+					fwrite($myfile, ''.$rowid['order_id'].'');
+					fclose($myfile);
 				}
-				else
-				{
-					echo '            ╔══════════╗'.PHP_EOL;  
-					echo '            '.$row['transaction_id'].PHP_EOL;
-					echo '            ╚══════════╝'.PHP_EOL;	
-				}
-				echo PHP_EOL;
-				echo 'KUNDENDATEN'.PHP_EOL; 
-				echo 'Kunde: '.html_entity_decode($customer['cname']).PHP_EOL;
-				echo PHP_EOL;
-				echo 'ADRESSE: '.PHP_EOL;
-				echo html_entity_decode($customer['wppizza-dbp-map-location']).PHP_EOL;
-				echo PHP_EOL;
-				echo 'Tel.: '.$customer['ctel'].PHP_EOL;
-				if($customer['ccomments']!=NULL)
-				{
-					echo 'Info: '.html_entity_decode($customer['ccomments']).PHP_EOL;
-				}
-				echo '════════════════════'.PHP_EOL; 
-				foreach($order['items'] as $order_item)
-				{
-					echo '- '.$order_item['quantity'].' x '.$order_item['title'].' '.$order_item["price_label"].PHP_EOL; 
-					if ( count($order_item['extend_data']['addingredients']['multi']) > 0)
+			}
+		}
+		if ($wpdb->num_rows > 0) 
+		{
+			$myfile = fopen($newfile, "r") or die("Unable to open files!");
+			$m=fgets($myfile);
+			fclose($myfile);
+			
+			// Create connection
+			function mb_unserialize($string)
+			{
+				$string2 = preg_replace_callback
+				(
+					'!s:(\d+):"(.*?)";!s',
+					function($m)
 					{
-						foreach($order_item['extend_data']['addingredients']['multi'] as $add_items)
+						$len = strlen($m[2]);
+						$result = "s:$len:\"{$m[2]}\";";
+						return $result;
+					},
+					$string
+				);
+				return unserialize($string2);
+			}    
+			
+			global $wpdb;
+			
+			$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`payment_status` LIKE 'COMPLETED') order by id asc limit 0,1";  
+				//$sql = "SELECT * FROM `wp_wppizza_orders` where id =8 order by id asc limit 0,1";
+				//$result = $wpdb->query("SET NAMES 'UTF8'");
+				$result = $wpdb->get_results($sql,ARRAY_A );
+				//var_dump($wpdb->num_rows); die;
+				if ($wpdb->num_rows > 0) 
+				{
+				  // output data of each row
+				  foreach($result as $row ) 
+				  {
+					$customer=mb_unserialize($row['customer_ini']);
+					$order=mb_unserialize($row['order_ini']);
+						echo get_bloginfo( 'name' ).PHP_EOL;
+					echo '            BESTELLNUMMER'.PHP_EOL; 
+					if($row['initiator']=='PAYPAL')
+					{
+						echo '           ╔════════════╗'.PHP_EOL;  
+						echo '           '.$row['transaction_id'].PHP_EOL;
+						echo '           ╚════════════╝'.PHP_EOL;
+					}
+					else
+					{
+						echo '            ╔══════════╗'.PHP_EOL;  
+						echo '            '.$row['transaction_id'].PHP_EOL;
+						echo '            ╚══════════╝'.PHP_EOL;	
+					}
+					echo PHP_EOL;
+					echo 'KUNDENDATEN'.PHP_EOL; 
+					echo 'Kunde: '.html_entity_decode($customer['cname']).PHP_EOL;
+					echo PHP_EOL;
+					echo 'ADRESSE: '.PHP_EOL;
+					echo html_entity_decode($customer['wppizza-dbp-map-location']).PHP_EOL;
+					echo PHP_EOL;
+					echo 'Tel.: '.$customer['ctel'].PHP_EOL;
+					if($customer['ccomments']!=NULL)
+					{
+						echo 'Info: '.html_entity_decode($customer['ccomments']).PHP_EOL;
+					}
+					echo '════════════════════'.PHP_EOL; 
+					foreach($order['items'] as $order_item)
+					{
+						echo '- '.$order_item['quantity'].' x '.$order_item['title'].' '.$order_item["price_label"].PHP_EOL; 
+						if ( count($order_item['extend_data']['addingredients']['multi']) > 0)
 						{
-							foreach($add_items as $atems)
+							foreach($order_item['extend_data']['addingredients']['multi'] as $add_items)
 							{
-								foreach($atems as $items)
+								foreach($add_items as $atems)
 								{
-									echo '      + '.$items['count'].'x '.$items['name'].' '.PHP_EOL;
-								}
-							}	
+									foreach($atems as $items)
+									{
+										echo '      + '.$items['count'].'x '.$items['name'].' '.PHP_EOL;
+									}
+								}	
+							}
 						}
 					}
+					echo '════════════════════'.PHP_EOL; 
+					echo "GESAMTBETRAG: ".$row['order_total']."€".PHP_EOL; 
+					echo '════════════════════'.PHP_EOL; 
+					echo 'Bezahlart: '; 
+					if($row['initiator']=='COD'){
+						echo 'Barzahlung';
+					}elseif($row['initiator']=='PAYPAL'){
+						echo 'Paypal';
+					}elseif($row['initiator']=='CCOD'){
+						echo 'Kartenzahlung';
+					}else{
+						echo $row['initiator'];
+					}
+					echo PHP_EOL;
+					echo 'Bestelltyp: '; 
+					if($row['order_self_pickup']=='N'){
+						echo 'Lieferung';
+					}elseif($row['order_self_pickup']=='Y'){
+						echo 'Abholung';
+					}
+					echo PHP_EOL;
+					echo PHP_EOL;
+					echo '   - DIES IST KEINE RECHNUNG - ';
+					echo PHP_EOL;
+					echo PHP_EOL;
+					//$timestamp = $row['order_date'];
+					//$datum = date("d.m.Y - H:i", $timestamp);
+					echo $row['order_date'];
+					
+					 $myfiles = fopen($newfile, "w") or die("Unable to open files!"); 
+					fwrite($myfiles, $row["id"]); 
+					fclose($myfiles);
+					die;
 				}
-				echo '════════════════════'.PHP_EOL; 
-				echo "GESAMTBETRAG: ".$row['order_total']."€".PHP_EOL; 
-				echo '════════════════════'.PHP_EOL; 
-				echo 'Bezahlart: '; 
-				if($row['initiator']=='COD'){
-					echo 'Barzahlung';
-				}elseif($row['initiator']=='PAYPAL'){
-					echo 'Paypal';
-				}elseif($row['initiator']=='CCOD'){
-					echo 'Kartenzahlung';
-				}else{
-					echo $row['initiator'];
-				}
-				echo PHP_EOL;
-				echo 'Bestelltyp: '; 
-				if($row['order_self_pickup']=='N'){
-					echo 'Lieferung';
-				}elseif($row['order_self_pickup']=='Y'){
-					echo 'Abholung';
-				}
-				echo PHP_EOL;
-				echo PHP_EOL;
-				echo '   - DIES IST KEINE RECHNUNG - ';
-				echo PHP_EOL;
-				echo PHP_EOL;
-				//$timestamp = $row['order_date'];
-				//$datum = date("d.m.Y - H:i", $timestamp);
-				echo $row['order_date'];
-				
-				 $myfiles = fopen($newfile, "w") or die("Unable to open files!"); 
-				fwrite($myfiles, $row["id"]); 
-				fclose($myfiles);
-				die;
 			}
 		}
 		die;

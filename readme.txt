@@ -15,7 +15,7 @@ API zum ansteuern der Drucker.
 == Changelog ==
 
 = 1.2.8 =
-* Update: Remove Array Entry
+* Update: Add check for exist orders.
 
 = 1.2.7 =
 * Update: Add multi printer Support
