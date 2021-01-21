@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: Masoud Goodarzi
+Contributors: Medienplanet24
 Tags: liefermia,printer
 Requires at least: 5.6
 Tested up to: 5.6
@@ -13,6 +13,9 @@ Here is a short description of the plugin.  This should be no more than 150 char
 API zum ansteuern der Drucker.
 
 == Changelog ==
+
+= 1.3.0 =
+* Update: Meta Files
 
 = 1.2.9 =
 * Update: Revert changes from 1.2.8 to 1.2.7 and add check for exist orders.

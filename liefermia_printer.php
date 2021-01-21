@@ -1,15 +1,15 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.9
+ * @version 1.3.0
  */
 /*
 Plugin Name: liefermia printer 
-Plugin URI: http://net1.ir/
+Plugin URI: https://www.medienplanet24.de
 Description:  
-Author: Masoud Goodarzi
-Version: 1.2.9
-Author URI: http://net1.ir/
+Author: Medienplanet24
+Version: 1.3.0
+Author URI: https://www.medienplanet24.de
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
 
@@ -56,7 +56,7 @@ function liefermia_printer_url_handler() {
 			//$sql = "SELECT * FROM `wp_wppizza_orders` where id =8 order by id asc limit 0,1";
 			//$result = $wpdb->query("SET NAMES 'UTF8'");
 			$result = $wpdb->get_results($sql,ARRAY_A );
-			//var_dump($wpdb->num_rows); die;
+			//var_dump($wpdb->num_rows); die();
 			if ($wpdb->num_rows > 0) {
 				// output data of each row
 				foreach($result as $row ) {
@@ -129,11 +129,11 @@ function liefermia_printer_url_handler() {
 					$myfiles = fopen($newfile, "w") or die("Unable to open files!"); 
 					fwrite($myfiles, $row["id"]); 
 					fclose($myfiles);
-					die;
+					die();
 				}
 			}
 		}
-		die;
+		die();
 	}
 }
 require 'plugin-update-checker/plugin-update-checker.php';
