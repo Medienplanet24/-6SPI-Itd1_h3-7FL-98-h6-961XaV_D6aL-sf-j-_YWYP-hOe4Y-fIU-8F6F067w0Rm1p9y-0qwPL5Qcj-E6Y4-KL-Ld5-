@@ -13,42 +13,34 @@ Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
 
-function liefermia_printer_url_handler()
-{
-    if( isset( $_GET['liefermia_printer_exe'] ) )
-    { 
-    	$upload_dir   = wp_upload_dir();
-    	    	$newfile= $upload_dir['basedir']."/last_access_device_".$_GET['device_id'].".txt";
+function liefermia_printer_url_handler() {
+	if (isset($_GET['liefermia_printer_exe'])) { 
+		$upload_dir   = wp_upload_dir();
+		$newfile= $upload_dir['basedir']."/last_access_device_".$_GET['device_id'].".txt";
 		global $wpdb;
 
-		if (!file_exists($newfile))
-		{
+		if (!file_exists($newfile)) {
 			$sqlid = "SELECT order_id FROM  `".$wpdb->prefix ."wppizza_orders_meta` ORDER BY `order_id` DESC LIMIT 1";
 			$resultid = $wpdb->get_results($sqlid,ARRAY_A );
-			if ($wpdb->num_rows > 0) 
-			{
-				foreach($resultid as $rowid )
-				{
+			if ($wpdb->num_rows > 0) {
+				foreach($resultid as $rowid ) {
 					$myfile = fopen($newfile, 'wb');
 					fwrite($myfile, ''.$rowid['order_id'].'');
 					fclose($myfile);
 				}
 			}
 		}
-		if ($wpdb->num_rows > 0) 
-		{
+		if ($wpdb->num_rows > 0) {
 			$myfile = fopen($newfile, "r") or die("Unable to open files!");
 			$m=fgets($myfile);
 			fclose($myfile);
-			
+
 			// Create connection
-			function mb_unserialize($string)
-			{
+			function mb_unserialize($string) {
 				$string2 = preg_replace_callback
 				(
 					'!s:(\d+):"(.*?)";!s',
-					function($m)
-					{
+					function($m) {
 						$len = strlen($m[2]);
 						$result = "s:$len:\"{$m[2]}\";";
 						return $result;
@@ -56,32 +48,27 @@ function liefermia_printer_url_handler()
 					$string
 				);
 				return unserialize($string2);
-			}    
-			
+			}
+
 			global $wpdb;
-			
+
 			$sql = "SELECT * FROM `".$wpdb->prefix ."wppizza_orders` where id >$m and (`payment_status` LIKE 'COMPLETED') order by id asc limit 0,1";  
-				//$sql = "SELECT * FROM `wp_wppizza_orders` where id =8 order by id asc limit 0,1";
-				//$result = $wpdb->query("SET NAMES 'UTF8'");
-				$result = $wpdb->get_results($sql,ARRAY_A );
-				//var_dump($wpdb->num_rows); die;
-				if ($wpdb->num_rows > 0) 
-				{
-				  // output data of each row
-				  foreach($result as $row ) 
-				  {
+			//$sql = "SELECT * FROM `wp_wppizza_orders` where id =8 order by id asc limit 0,1";
+			//$result = $wpdb->query("SET NAMES 'UTF8'");
+			$result = $wpdb->get_results($sql,ARRAY_A );
+			//var_dump($wpdb->num_rows); die;
+			if ($wpdb->num_rows > 0) {
+				// output data of each row
+				foreach($result as $row ) {
 					$customer=mb_unserialize($row['customer_ini']);
 					$order=mb_unserialize($row['order_ini']);
-						echo get_bloginfo( 'name' ).PHP_EOL;
+					echo get_bloginfo( 'name' ).PHP_EOL;
 					echo '            BESTELLNUMMER'.PHP_EOL; 
-					if($row['initiator']=='PAYPAL')
-					{
+					if ($row['initiator']=='PAYPAL') {
 						echo '           ╔════════════╗'.PHP_EOL;  
 						echo '           '.$row['transaction_id'].PHP_EOL;
 						echo '           ╚════════════╝'.PHP_EOL;
-					}
-					else
-					{
+					} else {
 						echo '            ╔══════════╗'.PHP_EOL;  
 						echo '            '.$row['transaction_id'].PHP_EOL;
 						echo '            ╚══════════╝'.PHP_EOL;	
@@ -94,25 +81,19 @@ function liefermia_printer_url_handler()
 					echo html_entity_decode($customer['wppizza-dbp-map-location']).PHP_EOL;
 					echo PHP_EOL;
 					echo 'Tel.: '.$customer['ctel'].PHP_EOL;
-					if($customer['ccomments']!=NULL)
-					{
+					if($customer['ccomments']!=NULL) {
 						echo 'Info: '.html_entity_decode($customer['ccomments']).PHP_EOL;
 					}
 					echo '════════════════════'.PHP_EOL; 
-					foreach($order['items'] as $order_item)
-					{
+					foreach($order['items'] as $order_item) {
 						echo '- '.$order_item['quantity'].' x '.$order_item['title'].' '.$order_item["price_label"].PHP_EOL; 
-						if ( count($order_item['extend_data']['addingredients']['multi']) > 0)
-						{
-							foreach($order_item['extend_data']['addingredients']['multi'] as $add_items)
-							{
-								foreach($add_items as $atems)
-								{
-									foreach($atems as $items)
-									{
+						if (count($order_item['extend_data']['addingredients']['multi']) > 0) {
+							foreach($order_item['extend_data']['addingredients']['multi'] as $add_items) {
+								foreach($add_items as $atems) {
+									foreach($atems as $items) {
 										echo '      + '.$items['count'].'x '.$items['name'].' '.PHP_EOL;
 									}
-								}	
+								}
 							}
 						}
 					}
@@ -120,20 +101,20 @@ function liefermia_printer_url_handler()
 					echo "GESAMTBETRAG: ".$row['order_total']."€".PHP_EOL; 
 					echo '════════════════════'.PHP_EOL; 
 					echo 'Bezahlart: '; 
-					if($row['initiator']=='COD'){
+					if($row['initiator']=='COD') {
 						echo 'Barzahlung';
-					}elseif($row['initiator']=='PAYPAL'){
+					} elseif ($row['initiator']=='PAYPAL') {
 						echo 'Paypal';
-					}elseif($row['initiator']=='CCOD'){
+					} elseif ($row['initiator']=='CCOD') {
 						echo 'Kartenzahlung';
-					}else{
+					} else {
 						echo $row['initiator'];
 					}
 					echo PHP_EOL;
 					echo 'Bestelltyp: '; 
-					if($row['order_self_pickup']=='N'){
+					if ($row['order_self_pickup']=='N') {
 						echo 'Lieferung';
-					}elseif($row['order_self_pickup']=='Y'){
+					} elseif ($row['order_self_pickup']=='Y') {
 						echo 'Abholung';
 					}
 					echo PHP_EOL;
@@ -144,8 +125,8 @@ function liefermia_printer_url_handler()
 					//$timestamp = $row['order_date'];
 					//$datum = date("d.m.Y - H:i", $timestamp);
 					echo $row['order_date'];
-					
-					 $myfiles = fopen($newfile, "w") or die("Unable to open files!"); 
+
+					$myfiles = fopen($newfile, "w") or die("Unable to open files!"); 
 					fwrite($myfiles, $row["id"]); 
 					fclose($myfiles);
 					die;
@@ -153,7 +134,7 @@ function liefermia_printer_url_handler()
 			}
 		}
 		die;
-    }
+	}
 }
 require 'plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
