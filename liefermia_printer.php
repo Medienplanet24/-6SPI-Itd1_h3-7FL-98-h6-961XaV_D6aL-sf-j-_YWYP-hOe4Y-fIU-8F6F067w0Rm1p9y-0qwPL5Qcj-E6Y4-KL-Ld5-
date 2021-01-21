@@ -1,14 +1,14 @@
 <?php
 /**
  * @package liefermia_printer
- * @version 1.2.8
+ * @version 1.2.7
  */
 /*
 Plugin Name: liefermia printer 
 Plugin URI: http://net1.ir/
 Description:  
 Author: Masoud Goodarzi
-Version: 1.2.8
+Version: 1.2.7
 Author URI: http://net1.ir/
 */
 add_action( 'init', 'liefermia_printer_url_handler' );
