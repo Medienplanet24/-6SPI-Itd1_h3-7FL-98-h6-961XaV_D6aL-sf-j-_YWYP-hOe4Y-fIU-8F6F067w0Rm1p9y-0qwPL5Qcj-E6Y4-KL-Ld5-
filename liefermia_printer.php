@@ -24,9 +24,13 @@ function liefermia_printer_url_handler()
 		if (!file_exists($newfile))
 		{
 			$sqlid = "SELECT order_id FROM  `".$wpdb->prefix ."wppizza_orders_meta` ORDER BY `order_id` DESC LIMIT 1";
-			$myfile = fopen($newfile, 'wb');
-			fwrite($myfile, ''.$sqlid['order_id'].'');
-			fclose($myfile);
+			$resultid = $wpdb->get_results($sqlid,ARRAY_A );
+			foreach($resultid as $rowid )
+			{
+			   	$myfile = fopen($newfile, 'wb');
+				fwrite($myfile, ''.$rowid['order_id'].'');
+				fclose($myfile);
+			}
 		}
 		$myfile = fopen($newfile, "r") or die("Unable to open files!");
 		$m=fgets($myfile);
